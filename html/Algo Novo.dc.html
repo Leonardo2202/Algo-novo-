@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algo Novo — Estampagem</title>
+<script src="../js/data.js"></script>
+<script src="../js/i18n.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/support.js"></script>
+<script src="../js/component.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/styles.css" />
+</helmet>
+
+<div class="page">
+
+  <sc-if value="{{ introVisible }}" hint-placeholder-val="{{ true }}">
+    <div class="intro-overlay">
+      <div class="intro-beam"></div>
+      <div class="intro-content">
+        <div class="intro-title">AN</div>
+        <div class="intro-tag">{{ t.introTag }}</div>
+      </div>
+    </div>
+  </sc-if>
+
+
+  <header class="header">
+    <div class="header-inner">
+      <a href="#inicio" class="brand">Algo Novo</a>
+      <nav class="nav">
+        <a href="#inicio" class="nav-link">{{ t.nav.inicio }}</a>
+        <a href="#servicos" class="nav-link">{{ t.nav.servicos }}</a>
+        <a href="#produtos" class="nav-link">{{ t.nav.produtos }}</a>
+        <a href="#contato" class="nav-link">{{ t.nav.contato }}</a>
+        <div class="lang-switch">
+          <button onClick="{{ toggleLang }}" class="lang-current" aria-label="Idioma">
+            <span class="lang-flag">{{ currentFlag }}</span>
+            <span class="lang-code">{{ currentLangLabel }}</span>
+            <span class="lang-caret">▾</span>
+          </button>
+          <sc-if value="{{ langOpen }}" hint-placeholder-val="{{ false }}">
+            <div class="lang-popover">
+              <sc-for list="{{ langs }}" as="l" hint-placeholder-count="4">
+                <button onClick="{{ l.select }}" style="{{ l.style }}" class="lang-option">
+                  <span class="lang-flag">{{ l.flag }}</span>
+                  <span class="lang-name">{{ l.name }}</span>
+                  <span class="lang-code">{{ l.label }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <button onClick="{{ openCart }}" class="btn-cart">
+          <span>🛒</span>
+          <span class="cart-count-badge">{{ cartCount }}</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <section id="inicio" class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <div class="eyebrow-light">{{ t.hero.eyebrow }}</div>
+      <h1 class="hero-title"><span class="hero-typed">{{ typed }}</span></h1>
+      <p class="hero-desc">{{ t.hero.desc }}</p>
+      <div class="hero-actions">
+        <a href="#contato" class="btn-hero-primary">{{ t.hero.cta1 }}</a>
+        <a href="#produtos" class="btn-hero-outline">{{ t.hero.cta2 }}</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicos" class="section-services">
+    <div data-reveal="1" class="services-head">
+      <div>
+        <div class="eyebrow-purple">{{ t.services.eyebrow }}</div>
+        <h2 class="section-title services">{{ t.services.title }}</h2>
+      </div>
+      <p class="services-lead">{{ t.services.lead }}</p>
+    </div>
+    <div class="services-grid">
+      <sc-for list="{{ services }}" as="s" hint-placeholder-count="6">
+        <div data-reveal="1" class="service-card">
+          <div class="service-num">{{ s.num }}</div>
+          <h3 class="service-name">{{ s.name }}</h3>
+          <p class="service-desc">{{ s.desc }}</p>
+          <div class="service-meta">{{ s.meta }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="produtos" class="section-products">
+    <div class="section-products-inner">
+      <div data-reveal="1" class="products-head">
+        <div class="eyebrow-purple">{{ t.products.eyebrow }}</div>
+        <h2 class="section-title products">{{ t.products.title }}</h2>
+      </div>
+      <div class="filters">
+        <sc-for list="{{ categories }}" as="c" hint-placeholder-count="5">
+          <button onClick="{{ c.select }}" style="{{ c.style }}">{{ c.label }}</button>
+        </sc-for>
+      </div>
+      <div class="products-grid">
+        <sc-for list="{{ visibleProducts }}" as="p" hint-placeholder-count="8">
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <img src="{{ p.img }}" alt="{{ p.name }}" class="product-img" />
+              <span class="product-shot">{{ p.shot }}</span>
+            </div>
+            <div class="product-info">
+              <div class="product-cat">{{ p.cat }}</div>
+              <h3 class="product-name">{{ p.name }}</h3>
+              <div class="product-price">{{ p.priceLabel }}</div>
+              <button onClick="{{ p.add }}" class="btn-add">{{ t.products.addToCart }}</button>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato" class="section-contato">
+    <div data-reveal="1" class="contato-info">
+      <div class="eyebrow-purple">{{ t.contato.eyebrow }}</div>
+      <h2 class="section-title contato">{{ t.contato.title }}</h2>
+      <p class="contato-lead">{{ t.contato.lead }}</p>
+      <div class="contato-details">
+        <div class="detail-label">{{ t.contato.whatsappLabel }}</div>
+        <a href="{{ waPlain }}" class="contato-phone">{{ phoneLabel }}</a>
+        <div class="contato-meta">{{ t.contato.meta }}</div>
+      </div>
+    </div>
+    <form onSubmit="{{ submitForm }}" data-reveal="1" class="form">
+      <div class="mode-tabs" role="tablist">
+        <button type="button" onClick="{{ setModePadrao }}" style="{{ modePadraoStyle }}" class="mode-tab">{{ t.contato.modePadrao }}</button>
+        <button type="button" onClick="{{ setModePersonalizado }}" style="{{ modePersonalizadoStyle }}" class="mode-tab">✨ {{ t.contato.modePersonalizado }}</button>
+      </div>
+
+      <label class="form-field">
+        <span class="form-label">{{ t.contato.formNome }}</span>
+        <input type="text" onChange="{{ setNome }}" placeholder="{{ t.contato.phNome }}" class="form-input" />
+      </label>
+      <label class="form-field">
+        <span class="form-label">{{ t.contato.formEmail }}</span>
+        <input type="email" onChange="{{ setEmail }}" placeholder="{{ t.contato.phEmail }}" class="form-input" />
+      </label>
+      <label class="form-field">
+        <span class="form-label">{{ t.contato.formDesc }}</span>
+        <textarea onChange="{{ setDesc }}" rows="5" placeholder="{{ t.contato.phDesc }}" class="form-textarea"></textarea>
+      </label>
+
+      <sc-if value="{{ isCustomMode }}" hint-placeholder-val="{{ false }}">
+        <div class="custom-panel">
+          <div class="custom-block">
+            <div class="form-label">{{ t.contato.customTitle }}</div>
+            <div class="form-hint">{{ t.contato.customHint }}</div>
+            <div class="size-grid">
+              <sc-for list="{{ sizeRows }}" as="s" hint-placeholder-count="9">
+                <div class="size-row">
+                  <span class="size-label">{{ s.label }}</span>
+                  <div class="size-controls">
+                    <button type="button" onClick="{{ s.dec }}" class="qty-btn">−</button>
+                    <span class="qty-value">{{ s.qty }}</span>
+                    <button type="button" onClick="{{ s.inc }}" class="qty-btn">+</button>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div class="size-total">{{ t.contato.totalPieces }}: <strong>{{ customTotal }}</strong></div>
+          </div>
+
+          <div class="custom-block">
+            <div class="form-label">{{ t.contato.uploadTitle }}</div>
+            <label class="upload-btn">
+              <input type="file" accept="image/*" onChange="{{ setArt }}" class="upload-input" />
+              <span class="upload-icon">📎</span>
+              <span class="upload-text">
+                <sc-if value="{{ hasArt }}" hint-placeholder-val="{{ false }}">{{ t.contato.uploadReplace }}</sc-if>
+                <sc-if value="{{ noArt }}" hint-placeholder-val="{{ true }}">{{ t.contato.uploadBtn }}</sc-if>
+              </span>
+            </label>
+            <sc-if value="{{ hasArt }}" hint-placeholder-val="{{ false }}">
+              <div class="upload-preview">
+                <img src="{{ artPreview }}" alt="{{ artName }}" class="upload-thumb" />
+                <div class="upload-meta">
+                  <div class="upload-fname">{{ artName }}</div>
+                  <div class="upload-fsize">{{ artSizeLabel }}</div>
+                </div>
+                <button type="button" onClick="{{ clearArt }}" class="upload-remove">{{ t.contato.removeArt }}</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ artError }}" hint-placeholder-val="{{ false }}">
+              <div class="upload-error">{{ t.contato.artTooBig }}</div>
+            </sc-if>
+            <div class="form-hint">{{ t.contato.uploadHint }}</div>
+            <div class="form-hint upload-email">{{ t.contato.uploadEmail }} <a href="{{ artMailto }}">{{ artEmail }}</a></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <button type="submit" class="btn-submit">{{ t.contato.submit }}</button>
+      <div class="form-hint">{{ t.contato.hint }}</div>
+    </form>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Algo Novo</div>
+        <div class="footer-tag">{{ t.footer.tag }}</div>
+      </div>
+      <div class="footer-lead">{{ t.footer.lead }}</div>
+      <div class="footer-links">
+        <a href="{{ waPlain }}" class="footer-link">{{ phoneLabel }}</a>
+        <span>© 2026 Algo Novo</span>
+      </div>
+    </div>
+  </footer>
+
+  <sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="cart-overlay">
+      <div onClick="{{ closeCart }}" class="cart-backdrop"></div>
+      <aside class="cart-drawer">
+        <div class="cart-header">
+          <div>
+            <div class="cart-eyebrow">{{ t.cart.eyebrow }}</div>
+            <div class="cart-title">{{ cartCountLabel }}</div>
+          </div>
+          <button onClick="{{ closeCart }}" class="cart-close">✕</button>
+        </div>
+        <div class="cart-body">
+          <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+            <div class="cart-empty">{{ t.cart.empty }}</div>
+          </sc-if>
+          <sc-for list="{{ cartLines }}" as="l" hint-placeholder-count="2">
+            <div class="cart-line">
+              <img src="{{ l.img }}" alt="{{ l.name }}" class="cart-line-img" />
+              <div class="cart-line-info">
+                <div class="cart-line-name">{{ l.name }}</div>
+                <div class="cart-line-unit">{{ l.unit }}</div>
+                <div class="cart-qty">
+                  <button onClick="{{ l.dec }}" class="qty-btn">−</button>
+                  <span class="qty-value">{{ l.qty }}</span>
+                  <button onClick="{{ l.inc }}" class="qty-btn">+</button>
+                </div>
+              </div>
+              <div class="cart-line-total">{{ l.total }}</div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ hasProject }}" hint-placeholder-val="{{ false }}">
+            <div class="cart-project">
+              <div class="cart-project-eyebrow">{{ t.cart.projectEyebrow }}</div>
+              <sc-if value="{{ projectNome }}" hint-placeholder-val="{{ false }}">
+                <div class="cart-project-line"><strong>{{ t.cart.nome }}:</strong> {{ projectNome }}</div>
+              </sc-if>
+              <sc-if value="{{ projectEmail }}" hint-placeholder-val="{{ false }}">
+                <div class="cart-project-line"><strong>{{ t.cart.email }}:</strong> {{ projectEmail }}</div>
+              </sc-if>
+              <sc-if value="{{ projectDesc }}" hint-placeholder-val="{{ false }}">
+                <div class="cart-project-desc">{{ projectDesc }}</div>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ hasCustom }}" hint-placeholder-val="{{ false }}">
+            <div class="cart-custom">
+              <div class="cart-project-eyebrow">✨ {{ t.cart.customEyebrow }}</div>
+              <sc-if value="{{ customSizesLabel }}" hint-placeholder-val="{{ false }}">
+                <div class="cart-project-line"><strong>{{ t.cart.customSizes }}:</strong> {{ customSizesLabel }}</div>
+                <div class="cart-project-line"><strong>{{ t.cart.customTotal }}:</strong> {{ customTotal }}</div>
+              </sc-if>
+              <div class="cart-project-line"><strong>{{ t.cart.customArt }}:</strong></div>
+              <sc-if value="{{ hasArt }}" hint-placeholder-val="{{ false }}">
+                <div class="cart-art">
+                  <img src="{{ artPreview }}" alt="{{ artName }}" class="cart-art-thumb" />
+                  <div class="cart-art-info">
+                    <div class="cart-art-name">{{ artName }}</div>
+                    <div class="cart-art-size">{{ artSizeLabel }}</div>
+                    <div class="cart-art-note">{{ t.contato.uploadEmail }} <a href="{{ artMailto }}">{{ artEmail }}</a></div>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noArt }}" hint-placeholder-val="{{ true }}">
+                <div class="cart-project-line">{{ t.cart.customArtMissing }}</div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+        <div class="cart-footer">
+          <div class="cart-total-row">
+            <span class="cart-total-label">{{ t.cart.totalLabel }}</span>
+            <span class="cart-total-value">{{ cartTotal }}</span>
+          </div>
+          <button type="button" onClick="{{ sendCart }}" class="btn-checkout">{{ t.cart.checkout }}</button>
+          <div class="cart-hint">{{ t.cart.hint }}</div>
+        </div>
+      </aside>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showIntro&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Comportamento&quot;},&quot;showPrices&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Comportamento&quot;},&quot;whatsappNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+351 939 017 483&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contato&quot;},&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;pt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Idioma&quot;}}">
+const Component = window.AN_DEFINE_COMPONENT(DCLogic);
+</script>
+</body>
+</html>
