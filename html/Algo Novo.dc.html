@@ -192,7 +192,7 @@
             </label>
             <sc-if value="{{ hasArt }}" hint-placeholder-val="{{ false }}">
               <div class="upload-preview">
-                <img src="{{ artPreview }}" alt="{{ artName }}" class="upload-thumb" />
+                <img data-src="{{ artPreview }}" alt="{{ artName }}" class="upload-thumb" />
                 <div class="upload-meta">
                   <div class="upload-fname">{{ artName }}</div>
                   <div class="upload-fsize">{{ artSizeLabel }}</div>
@@ -245,7 +245,7 @@
           </sc-if>
           <sc-for list="{{ cartLines }}" as="l" hint-placeholder-count="2">
             <div class="cart-line">
-              <img src="{{ l.img }}" alt="{{ l.name }}" class="cart-line-img" />
+              <img data-src="{{ l.img }}" alt="{{ l.name }}" class="cart-line-img" />
               <div class="cart-line-info">
                 <div class="cart-line-name">{{ l.name }}</div>
                 <div class="cart-line-unit">{{ l.unit }}</div>
@@ -282,7 +282,7 @@
               <div class="cart-project-line"><strong>{{ t.cart.customArt }}:</strong></div>
               <sc-if value="{{ hasArt }}" hint-placeholder-val="{{ false }}">
                 <div class="cart-art">
-                  <img src="{{ artPreview }}" alt="{{ artName }}" class="cart-art-thumb" />
+                  <img data-src="{{ artPreview }}" alt="{{ artName }}" class="cart-art-thumb" />
                   <div class="cart-art-info">
                     <div class="cart-art-name">{{ artName }}</div>
                     <div class="cart-art-size">{{ artSizeLabel }}</div>
